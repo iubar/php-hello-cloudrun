@@ -1,0 +1,5 @@
+gcloud run deploy \
+  --source=. \
+  --platform=managed \
+  --region=europe-west1 \
+  --allow-unauthenticated

@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# === CONFIGURA QUI ===
+PROJECT_ID="tuo-project-id"          # Sostituisci con il tuo ID progetto GCP
+SERVICE_NAME="php-apache-service"    # Nome del servizio Cloud Run
+REGION="europe-west1"                # Regione Cloud Run
+IMAGE_NAME="php-apache-image"        # Nome immagine container
+PORT=8080                            # Porta di ascolto, se diversa
+
+# === LOGIN A GCP ===
+echo "✅ Autenticazione con Google Cloud..."
+gcloud auth login
+
+# === IMPOSTA PROGETTO ===
+echo "✅ Imposto il progetto..."
+gcloud config set project $PROJECT_ID
+
+# === COSTRUZIONE DELL'IMMAGINE DOCKER ===
+echo "🐳 Costruisco l'immagine Docker..."
+gcloud builds submit --tag gcr.io/$PROJECT_ID/$IMAGE_NAME .
+
+# === DEPLOY SU CLOUD RUN ===
+echo "🚀 Deploy del servizio su Cloud Run..."
+gcloud run deploy $SERVICE_NAME \
+  --image gcr.io/$PROJECT_ID/$IMAGE_NAME \
+  --platform managed \
+  --region $REGION \
+  --allow-unauthenticated \
+  --port $PORT
+
+# === OUTPUT ===
+echo "🎉 Deploy completato!"
+gcloud run services describe $SERVICE_NAME --platform managed --region $REGION --format="value(status.url)"
