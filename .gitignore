@@ -12,6 +12,8 @@ composer.phar
 .buildpath
 
 config.ini
-config.ini.*
+config-local.ini
 **/.env
-**/.env.*
+**/.env.local
+
+cloudbuild.yaml # work in progress

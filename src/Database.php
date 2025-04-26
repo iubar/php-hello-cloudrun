@@ -55,7 +55,7 @@ class Database
     // Crea una connessione al database utilizzando PDO
     public function connect(bool $useSsl = false): \PDO {
         
-        $charset = 'utf8mb4';
+        $charset = 'utf8mb4'; // E' il charset di default a partire da MySQL 5.7.7+ / 8.0 (da 5.x a 5.7 era "latin1")
         
         /**
          * 1) Some servers (like AWS RDS, Google Cloud SQL) only require the CA file — no client cert/key needed.
@@ -67,8 +67,7 @@ class Database
             //\PDO::MYSQL_ATTR_SSL_KEY    => '/path/to/client-key.pem',  // Client private key
             \PDO::ATTR_ERRMODE          => \PDO::ERRMODE_EXCEPTION,
         ];
-        
-        
+                
         $dsn = "mysql:host={$this->host};dbname={$this->dbname}";
         // $dsn = "mysql:host={$this->host};dbname={$this->dbname};charset=$charset";
         
@@ -112,13 +111,15 @@ class Database
     public function checkSslConn() : array {
         $isSsl = false;
         $message = '';
-        $stm = $this->pdo->query("SHOW STATUS LIKE 'Ssl_cipher'");
+        $stm = $this->pdo->query("SHOW STATUS LIKE 'Ssl_cipher'"); //eg: "TLS_AES_256_GCM_SHA384"
         if(!$stm){
             $message = "❌ 🔴 Query error !";
         }else{
             $result = $stm->fetch(\PDO::FETCH_ASSOC);
             if (is_array($result) && !empty($result['Value'])) {
-                assert(is_string($result['Value'])); // Gli assert() vengono eseguiti solo se zend.assertions = 1 (oppure se vale 0 sono compilati ma non eseguiti)
+                assert(is_string($result['Value']));    // Gli assert() vengono eseguiti solo se zend.assertions = 1 (oppure se vale 0 sono compilati ma non eseguiti)
+                                                        // Verificare con : echo 'zend.assertions = ' . ini_get('zend.assertions');
+                                                        // oppure : php -i | grep zend.assertions
                 $message = "✔️ 🟢 SSL connection is active. Cipher: " . $result['Value'];
                 $isSsl = true;
             } else {
