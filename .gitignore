@@ -1,19 +1,30 @@
 .git/
 *.log
 *.tmp
-node_modules/
-vendor/
-composer.phar
 
-4git
-
+### Eclipse ###
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
 .project
 .settings
 .buildpath
 
+### NodeJs ###
+node_modules/
+
+### Composer ###
+composer.phar
+vendor/
+
+### Config ###
 config.ini
-config-local.ini
 **/.env
 **/.env.local
+**/.env.remote
+4git
 
-cloudbuild.yaml # work in progress
+# working on:
+cloudbuild.yaml 
