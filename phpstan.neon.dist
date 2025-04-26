@@ -1,0 +1,7 @@
+# phpstan.neon.dist
+parameters:
+    level: 9
+    paths:
+        - src
+        - index.php
+

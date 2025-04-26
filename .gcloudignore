@@ -1,0 +1,8 @@
+.git/
+vendor/
+*.log
+*.tmp
+node_modules/
+tests/
+phpstan.neon
+phpunit.xml

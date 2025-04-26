@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.2/phpunit.xsd" 
+bootstrap = "vendor/autoload.php" 
+colors="true"
+stopOnError="false"
+stopOnFailure="false"
+stopOnDeprecation="false"
+stopOnWarning="0"  
+displayDetailsOnTestsThatTriggerWarnings="true"
+displayDetailsOnTestsThatTriggerErrors="true"
+displayDetailsOnTestsThatTriggerDeprecations="true"
+defaultTestSuite="all"
+failOnWarning="0"
+failOnDeprecation="false" 
+cacheResult="false" 
+>
+  <testsuites>
+    <testsuite name="all">
+      <directory suffix=".php">tests</directory>
+    </testsuite>
+  </testsuites> 
+	<logging>
+ 		<junit outputFile="logs/junit.xml"/>
+		<testdoxHtml outputFile="logs/testdox.html"/>
+	</logging>
+	
+	
+</phpunit>

@@ -1,0 +1,17 @@
+.git/
+*.log
+*.tmp
+node_modules/
+vendor/
+composer.phar
+
+4git
+
+.project
+.settings
+.buildpath
+
+config.ini
+config.ini.*
+**/.env
+**/.env.*
