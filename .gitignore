@@ -16,6 +16,7 @@ composer.phar
 vendor/
 
 ### Config ###
+credentials.json
 config.ini
 **/.env
 **/.env.local
