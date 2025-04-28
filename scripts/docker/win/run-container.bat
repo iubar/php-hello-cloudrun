@@ -12,7 +12,7 @@ SETLOCAL
 CALL %SCRIPT_DIR%\config.bat
 
 :: Il flag -d nel comando docker run -d significa "detached mode", cioè esegui il container in background
-docker run -d -p %LOCAL_PORT%:8080 --name %CONTAINER_NAME% %IMAGE_NAME%:latest
+docker run -d --env-file %PROJECT_ROOT%/.env -p %LOCAL_PORT%:8080 --name %CONTAINER_NAME% %IMAGE_NAME%:latest
 
 IF %ERRORLEVEL% neq 0 (
     ECHO Il comando è fallito!

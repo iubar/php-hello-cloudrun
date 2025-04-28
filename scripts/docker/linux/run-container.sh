@@ -16,7 +16,7 @@ source "$SCRIPT_DIR/config.sh"
 echo "🚀 🐳 Starting the container... "
 # Esegui il container in background (detached mode)
 # -d = avvia in background (detached)
-docker run -d --env-file .env -p $LOCAL_PORT:8080 --name "$CONTAINER_NAME" "${IMAGE_NAME}:latest"
+docker run -d --env-file ${PROJECT_ROOT}/.env -p $LOCAL_PORT:8080 --name "$CONTAINER_NAME" "${IMAGE_NAME}:latest"
 
 if [ $? -ne 0 ]; then
     echo "❌ Il comando è fallito!"
