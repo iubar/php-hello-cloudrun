@@ -24,7 +24,7 @@ config.ini
 **/.env
 **/.env.local
 **/.env.remote
-4git
+git/
 
 # working on:
 cloudbuild.yaml 

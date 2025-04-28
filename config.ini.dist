@@ -1,6 +1,0 @@
-; config.ini
-[database]
-host = "localhost"
-username = "root"
-password = ""
-dbname = "testdb"

@@ -3,6 +3,8 @@
 // Carica il file autoload di Composer
 require "vendor/autoload.php";
 
+use Dotenv\Dotenv;
+
 /**
  * @return array<string, string> La configurazione del database.
  */
@@ -11,35 +13,52 @@ function loadConfig(): array {
 
     // $debug = getenv("DEBUG"); // false
  
-    if(getenv("DB_HOST")) {
-        $host = getenv("DB_HOST");
-        $dbname = getenv("DB_NAME");
-        $username = getenv("DB_USER");
-        $password = getenv("DB_PASS");
-        
-        $config = [
-            'host' => $host,
-            'username' => $username,
-            'password' => $password,
-            'dbname' => $dbname,
-        ];
-    }else{        
-        $filename = "config.ini";
-        if (!is_readable($filename)) {
-           echo "File not found : " . $filename . PHP_EOL;
-           exit(1);
-        }
-        $configFromIniFile = parse_ini_file($filename, true); // returns false|array    
-        if ($configFromIniFile) {
-            $config = $configFromIniFile["database"];
-        } else{
-            echo "Invalid db config." . PHP_EOL;
-            exit(1);
-        }
+    $file = __DIR__ . '/.env';
+    
+    if(is_file($file) && is_readable($file)){
+        // Crea l'istanza di Dotenv e carica il file .env
+        $dotenv = Dotenv::createImmutable(__DIR__);
+        $dotenv->load();
     }
- 
+    
+    $host = getenvOrEmpty("DB_HOST");
+    $dbname = getenvOrEmpty("DB_NAME");
+    $username = getenvOrEmpty("DB_USER");
+    $password = getenvOrEmpty("DB_PASS");
+    
+    $config = [
+        'host' => $host,
+        'username' => $username,
+        'password' => $password,
+        'dbname' => $dbname,
+    ];
+
+    /*
+    $filename = "config.ini";
+    if (!is_readable($filename)) {
+       echo "File not found : " . $filename . PHP_EOL;
+       exit(1);
+    }
+    $configFromIniFile = parse_ini_file($filename, true); // returns false|array    
+    if ($configFromIniFile) {
+        $config = $configFromIniFile["database"];
+    } else{
+        echo "Invalid db config." . PHP_EOL;
+        exit(1);
+    }
+    */
+  
     return $config;
 }
+
+function getenvOrEmpty(string $varName) : string {
+    // Usa getenv() per ottenere il valore della variabile
+    $value = getenv($varName);
+    
+    // Se la variabile d'ambiente non è settata, restituisci una stringa vuota
+    return $value !== false ? $value : '';
+}
+
 
 // Imposta il fuso orario corretto se necessario
 date_default_timezone_set('Europe/Rome');
