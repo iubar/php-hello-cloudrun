@@ -15,16 +15,28 @@ function loadConfig(): array {
  
     $file = __DIR__ . '/.env';
     
-    if(is_file($file) && is_readable($file)){
-        // Crea l'istanza di Dotenv e carica il file .env
-        $dotenv = Dotenv::createImmutable(__DIR__);
-        $dotenv->load();
-    }
-    
     $host = getenvOrEmpty("DB_HOST");
     $dbname = getenvOrEmpty("DB_NAME");
     $username = getenvOrEmpty("DB_USER");
     $password = getenvOrEmpty("DB_PASS");
+    
+    if(!$host && !$dbname){
+        if(is_file($file) && is_readable($file)){
+            // Crea l'istanza di Dotenv e carica il file .env
+            $dotenv = Dotenv::createImmutable(__DIR__);
+            $dotenv->load();
+            
+            $host = getenvOrEmpty("DB_HOST");
+            $dbname = getenvOrEmpty("DB_NAME");
+            $username = getenvOrEmpty("DB_USER");
+            $password = getenvOrEmpty("DB_PASS");
+        }
+    }
+        
+    if(!$host || !$dbname){
+        echo "Please set the right env variables for the db connection." . PHP_EOL;
+        exit(1);
+    }
     
     $config = [
         'host' => $host,
@@ -32,11 +44,6 @@ function loadConfig(): array {
         'password' => $password,
         'dbname' => $dbname,
     ];
-
-    if(!$host || !$dbname){
-        echo "Please set the right env variables for the db connection." . PHP_EOL;
-        exit(1);
-    }
   
     return $config;
 }
