@@ -1,7 +1,7 @@
 ### Eclipse ###
 .metadata
-bin/
-tmp/
+bin
+tmp
 *.tmp
 *.bak
 .project
@@ -9,22 +9,22 @@ tmp/
 .buildpath
 
 ### NodeJs ###
-node_modules/
+node_modules
 
 ### Composer ###
 composer.phar
-vendor/
+vendor
 
 ### Config ###
 credentials.json
 config.ini
-**/.env
-**/.env.local
-**/.env.remote
+.env
+.env.local
+.env.remote
 
 ### Misc ###
 *.log
-logs/
+logs
 *.tmp
 scripts/git/
 cloudbuild.yaml 
