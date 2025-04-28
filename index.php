@@ -33,20 +33,10 @@ function loadConfig(): array {
         'dbname' => $dbname,
     ];
 
-    /*
-    $filename = "config.ini";
-    if (!is_readable($filename)) {
-       echo "File not found : " . $filename . PHP_EOL;
-       exit(1);
-    }
-    $configFromIniFile = parse_ini_file($filename, true); // returns false|array    
-    if ($configFromIniFile) {
-        $config = $configFromIniFile["database"];
-    } else{
-        echo "Invalid db config." . PHP_EOL;
+    if(!$host || !$dbname){
+        echo "Please set the right env variables for the db connection." . PHP_EOL;
         exit(1);
     }
-    */
   
     return $config;
 }
