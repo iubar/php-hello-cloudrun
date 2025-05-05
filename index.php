@@ -48,14 +48,15 @@ function loadConfig(): array {
     return $config;
 }
 
+/**
+ * Il metodo permette di superare il type check di phpstan
+ */
 function getenvOrEmpty(string $varName) : string {
     // Usa getenv() per ottenere il valore della variabile
     $value = getenv($varName);
-    
     // Se la variabile d'ambiente non è settata, restituisci una stringa vuota
     return $value !== false ? $value : '';
 }
-
 
 // Imposta il fuso orario corretto se necessario
 date_default_timezone_set('Europe/Rome');
