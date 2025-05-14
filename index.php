@@ -29,10 +29,10 @@ function loadConfig(): array {
             $dotenv = Dotenv::createImmutable($dirname, $basename);
             $dotenv->load();
             
-            $host = getenvOrEmpty("DB_HOST");
-            $dbname = getenvOrEmpty("DB_NAME");
-            $username = getenvOrEmpty("DB_USER");
-            $password = getenvOrEmpty("DB_PASS");
+            $host = readEnv("DB_HOST");
+            $dbname = readEnv("DB_NAME");
+            $username = readEnv("DB_USER");
+            $password = readEnv("DB_PASS");
         }else{
             echo "Error : can't read the config file $file " . PHP_EOL;
         }
@@ -51,6 +51,20 @@ function loadConfig(): array {
     ];
   
     return $config;
+}
+
+
+function readEnv(string $name) : string|bool|int|null {
+    $value = null;
+    // $value = getenv($name); // Using getenv() and putenv() is strongly discouraged due to the fact that these functions are not thread safe.
+    if(!$value){
+        if(isset($_ENV[$name])){
+            $value = $_ENV[$name] ;
+        }else if(isset($_SERVER[$name])){
+            $value = $_SERVER[$name];
+        }
+    }
+    return $value;
 }
 
 /**
