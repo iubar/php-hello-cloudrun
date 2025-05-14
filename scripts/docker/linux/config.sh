@@ -8,8 +8,8 @@ SCRIPT_DIR="${SCRIPT_DIR%/}"
 
 PROJECT_ROOT="$SCRIPT_DIR/../../.."
 
-IMAGE_NAME="hello-cloudrun-image"
+IMAGE_NAME="hello-php-cloudrun-image"
 
-CONTAINER_NAME="hello-cloudrun-container"
+CONTAINER_NAME="hello-php-cloudrun-container"
 
 LOCAL_PORT=81
