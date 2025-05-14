@@ -23,13 +23,18 @@ function loadConfig(): array {
     if(!$host && !$dbname){
         if(is_file($file) && is_readable($file)){
             // Crea l'istanza di Dotenv e carica il file .env
-            $dotenv = Dotenv::createImmutable(__DIR__);
+            $path_parts = pathinfo($file);	
+            $dirname =  $path_parts['dirname'];
+            $basename =  $path_parts['basename'];
+            $dotenv = Dotenv::createImmutable($dirname, $basename);
             $dotenv->load();
             
             $host = getenvOrEmpty("DB_HOST");
             $dbname = getenvOrEmpty("DB_NAME");
             $username = getenvOrEmpty("DB_USER");
             $password = getenvOrEmpty("DB_PASS");
+        }else{
+            echo "Error : can't read the config file $file " . PHP_EOL;
         }
     }
         

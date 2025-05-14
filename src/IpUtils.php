@@ -11,6 +11,7 @@ public function getPublicIp() : string {
     $services = [
         'https://api.ipify.org',
         'https://ifconfig.me/ip',
+        'https://icanhazip.com',
         'https://checkip.amazonaws.com'
     ];
 
