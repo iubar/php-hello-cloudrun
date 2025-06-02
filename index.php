@@ -57,13 +57,13 @@ function loadConfig(): array {
 function readEnv(string $name) : string|bool|int|null {
     $value = null;
     // $value = getenv($name); // Using getenv() and putenv() is strongly discouraged due to the fact that these functions are not thread safe.
-    if(!$value){
+    //if(!$value){
         if(isset($_ENV[$name])){
             $value = $_ENV[$name] ;
         }else if(isset($_SERVER[$name])){
             $value = $_SERVER[$name];
         }
-    }
+    //}
     return $value;
 }
 
