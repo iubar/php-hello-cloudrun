@@ -6,7 +6,7 @@ require "vendor/autoload.php";
 use Dotenv\Dotenv;
 
 /**
- * @return array<string, string> La configurazione del database.
+ * @return array<string, mixed> La configurazione del database.
  */
 function loadConfig(): array {
     $config = [];
@@ -54,7 +54,7 @@ function loadConfig(): array {
 }
 
 
-function readEnv(string $name) : string|bool|int|null {
+function readEnv(string $name) : mixed {
     $value = null;
     // $value = getenv($name); // Using getenv() and putenv() is strongly discouraged due to the fact that these functions are not thread safe.
     //if(!$value){
