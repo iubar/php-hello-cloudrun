@@ -6,7 +6,7 @@ require "vendor/autoload.php";
 use Dotenv\Dotenv;
 
 /**
- * @return array<string, mixed> La configurazione del database.
+ * @return array<string, string> La configurazione del database.
  */
 function loadConfig(): array {
     $config = [];
@@ -29,10 +29,10 @@ function loadConfig(): array {
             $dotenv = Dotenv::createImmutable($dirname, $basename);
             $dotenv->load();
             
-            $host = readEnv("DB_HOST");
-            $dbname = readEnv("DB_NAME");
-            $username = readEnv("DB_USER");
-            $password = readEnv("DB_PASS");
+            $host = (string) readEnv("DB_HOST");
+            $dbname = (string) readEnv("DB_NAME");
+            $username = (string) readEnv("DB_USER");
+            $password = (string) readEnv("DB_PASS");
         }else{
             echo "Error : can't read the config file $file " . PHP_EOL;
         }
@@ -54,17 +54,71 @@ function loadConfig(): array {
 }
 
 
-function readEnv(string $name) : mixed {
-    $value = null;
+function readEnv(string $name) : string {
+    $value = '';
     // $value = getenv($name); // Using getenv() and putenv() is strongly discouraged due to the fact that these functions are not thread safe.
-    //if(!$value){
-        if(isset($_ENV[$name])){
-            $value = $_ENV[$name] ;
-        }else if(isset($_SERVER[$name])){
-            $value = $_SERVER[$name];
-        }
-    //}
+if (isset($_ENV[$name])) {
+        $value = mixedToString($_ENV[$name]);
+} else if (isset($_SERVER[$name])) {
+         $value = mixedToString($_SERVER[$name]); 
+} 
     return $value;
+}
+ 
+function mixedToString(mixed $value) : string {
+    if (is_string($value)) {
+        return $value;
+    }
+    if (is_null($value)) {
+        return '';
+    }
+    if (is_bool($value)) {
+        return $value ? '1' : '';
+    }
+    if (is_int($value) || is_float($value)) {
+        return (string) $value;
+    }
+    if (is_object($value) && method_exists($value, '__toString')) {
+        return (string) $value;
+    }
+    if (is_array($value)) {
+        // Se vuoi puoi serializzare o json_encode
+        $encoded = json_encode($value);
+        return $encoded !== false ? $encoded : '';
+    }
+
+    // Per sicurezza, fallback
+    return '';
+}
+
+function stringToBooleanOrNull(string $str): ?bool {
+    $str = strtolower(trim($str));
+    $trueValues = ['1', 'true', 'yes', 'on'];
+    $falseValues = ['0', 'false', 'no', 'off'];
+
+    if (in_array($str, $trueValues, true)) {
+        return true;
+    }
+    if (in_array($str, $falseValues, true)) {
+        return false;
+    }
+    // Non rappresenta un booleano valido
+    return null;
+}
+
+function isBoolean(string $str): bool {
+    $str = strtolower(trim($str));
+    $trueValues = ['1', 'true', 'yes', 'on'];
+    $falseValues = ['0', 'false', 'no', 'off'];
+
+    if (in_array($str, $trueValues, true)) {
+        return true;
+    }
+    if (in_array($str, $falseValues, true)) {
+        return true;
+    }
+    // Non rappresenta un booleano valido
+    return false;
 }
 
 /**
