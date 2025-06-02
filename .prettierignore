@@ -1,0 +1,22 @@
+# Ignora cartelle tipiche PHP
+vendor 
+storage
+cache
+
+# Ignora file di configurazione
+.env
+.env.local
+.phpunit.result.cache
+
+# Ignora file di build, log e cache
+node_modules
+dist
+build
+coverage
+*.log
+
+# Ignora file minificati e lock
+*.min.js
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
