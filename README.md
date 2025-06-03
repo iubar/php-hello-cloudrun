@@ -14,4 +14,5 @@ Google Cloud Run hello project
 ## Prettier
 
   prettier --check ".\*.{js,css,html,php}" --plugin "%APPDATA%/npm/node_modules/@prettier/plugin-php/src/index.mjs"
+  
   prettier --write ".\*.php" --plugin "%APPDATA%/npm/node_modules/@prettier/plugin-php/src/index.mjs"
