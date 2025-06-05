@@ -13,123 +13,81 @@ function loadConfig(): array {
 
 	// $debug = getenv("DEBUG"); // false
 
-	$file = __DIR__ . '/.env';
-
-	$host = getenvOrEmpty('DB_HOST');
-	$dbname = getenvOrEmpty('DB_NAME');
-	$username = getenvOrEmpty('DB_USER');
-	$password = getenvOrEmpty('DB_PASS');
-
-	if (!$host && !$dbname) {
-		if (is_file($file) && is_readable($file)) {
-			// Crea l'istanza di Dotenv e carica il file .env
-			$path_parts = pathinfo($file);
-			$dirname = $path_parts['dirname'];
-			$basename = $path_parts['basename'];
-			$dotenv = Dotenv::createImmutable($dirname, $basename);
-			$dotenv->load();
-
-			$host = (string) readEnv('DB_HOST');
-			$dbname = (string) readEnv('DB_NAME');
-			$username = (string) readEnv('DB_USER');
-			$password = (string) readEnv('DB_PASS');
-		} else {
-			echo "Error : can't read the config file $file " . PHP_EOL;
-		}
+	$envFile = __DIR__ . '/.env';
+ 
+	if (is_file($envFile) && is_readable($envFile)) {
+	    echo 'INFO : reading env file ' . $envFile .  ' ...' . PHP_EOL;
+		// Crea l'istanza di Dotenv e carica il file .env
+	    $path_parts = pathinfo($envFile);
+		$dirname = $path_parts['dirname'];
+		$basename = $path_parts['basename'];
+		$dotenv = Dotenv::createImmutable($dirname, $basename);
+		$dotenv->load();
+	} else {
+	    if ($envFile) {
+	        echo 'WARNING : env file ' . $envFile . ' not found !' . PHP_EOL;
+	    }
 	}
-
+ 
+	$host = readEnv('DB_HOST');
+	$dbname = readEnv('DB_NAME');
+	$username = readEnv('DB_USER');
+	$password = readEnv('DB_PASS');
+	
 	if (!$host || !$dbname) {
 		echo 'Please set the right env variables for the db connection.' . PHP_EOL;
 		exit(1);
 	}
 
 	$config = [
-		'host' => $host,
-		'username' => $username,
-		'password' => $password,
-		'dbname' => $dbname
+		'DB_HOST' => $host,
+	    'DB_NAME' => $dbname,
+		'DB_USER' => $username,
+		'DB_PASS' => $password,	    
 	];
 
 	return $config;
 }
 
-function readEnv(string $name): string {
-	$value = '';
-	// $value = getenv($name); // Using getenv() and putenv() is strongly discouraged due to the fact that these functions are not thread safe.
-	if (isset($_ENV[$name])) {
-		$value = mixedToString($_ENV[$name]);
-	} elseif (isset($_SERVER[$name])) {
-		$value = mixedToString($_SERVER[$name]);
-	}
-	return $value;
+function readEnv(string $varName): string {
+    $value = '';
+    if (isset($_ENV[$varName])) {
+        $value = mixedToString($_ENV[$varName]);
+    } else if (isset($_SERVER[$varName])) {
+        $value = mixedToString($_SERVER[$varName]);
+    }else{
+        $value = getenv($varName);
+        $value = $value !== false ? $value : '';
+    }
+    return $value;
 }
 
 function mixedToString(mixed $value): string {
-	if (is_string($value)) {
-		return $value;
-	}
-	if (is_null($value)) {
-		return '';
-	}
-	if (is_bool($value)) {
-		return $value ? '1' : '';
-	}
-	if (is_int($value) || is_float($value)) {
-		return (string) $value;
-	}
-	if (is_object($value) && method_exists($value, '__toString')) {
-		return (string) $value;
-	}
-	if (is_array($value)) {
-		// Se vuoi puoi serializzare o json_encode
-		$encoded = json_encode($value);
-		return $encoded !== false ? $encoded : '';
-	}
-
-	// Per sicurezza, fallback
-	return '';
+    if (is_string($value)) {
+        return $value;
+    }
+    if (is_null($value)) {
+        return '';
+    }
+    if (is_bool($value)) {
+        return $value ? '1' : '';
+    }
+    if (is_int($value) || is_float($value)) {
+        return (string) $value;
+    }
+    if (is_object($value) && method_exists($value, '__toString')) {
+        return (string) $value;
+    }
+    if (is_array($value)) {
+        // Se vuoi puoi serializzare o json_encode
+        $encoded = json_encode($value);
+        return $encoded !== false ? $encoded : '';
+    }
+    
+    // Per sicurezza, fallback
+    return '';
 }
-
-function stringToBooleanOrNull(string $str): ?bool {
-	$str = strtolower(trim($str));
-	$trueValues = ['1', 'true', 'yes', 'on'];
-	$falseValues = ['0', 'false', 'no', 'off'];
-
-	if (in_array($str, $trueValues, true)) {
-		return true;
-	}
-	if (in_array($str, $falseValues, true)) {
-		return false;
-	}
-	// Non rappresenta un booleano valido
-	return null;
-}
-
-function isBoolean(string $str): bool {
-	$str = strtolower(trim($str));
-	$trueValues = ['1', 'true', 'yes', 'on'];
-	$falseValues = ['0', 'false', 'no', 'off'];
-
-	if (in_array($str, $trueValues, true)) {
-		return true;
-	}
-	if (in_array($str, $falseValues, true)) {
-		return true;
-	}
-	// Non rappresenta un booleano valido
-	return false;
-}
-
-/**
- * Il metodo permette di superare il type check di phpstan
- */
-function getenvOrEmpty(string $varName): string {
-	// Usa getenv() per ottenere il valore della variabile
-	$value = getenv($varName);
-	// Se la variabile d'ambiente non è settata, restituisci una stringa vuota
-	return $value !== false ? $value : '';
-}
-
+ 
 // Imposta il fuso orario corretto se necessario
 date_default_timezone_set('Europe/Rome');
 

@@ -15,10 +15,10 @@ class Database {
 	 */
 	public function __construct(array $config) {
 		// Carica la configurazione dal file ini
-		$this->host = $config['host'];
-		$this->username = $config['username'];
-		$this->password = $config['password'];
-		$this->dbname = $config['dbname'];
+		$this->host = $config['DB_HOST'];
+		$this->username = $config['DB_USER'];
+		$this->password = $config['DB_PASS'];
+		$this->dbname = $config['DB_NAME'];
 
 		$result = $this->checkPdoDrivers();
 		if (!$result['status']) {
