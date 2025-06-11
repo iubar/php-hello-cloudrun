@@ -24,9 +24,7 @@ function loadConfig(): array {
 		$dotenv = Dotenv::createImmutable($dirname, $basename);
 		$dotenv->load();
 	} else {
-	    if ($envFile) {
-	        echo 'WARNING : env file ' . $envFile . ' not found !' . PHP_EOL;
-	    }
+        echo 'WARNING : can\'t read the config file ' . $envFile . PHP_EOL;
 	}
  
 	$host = readEnv('DB_HOST');
